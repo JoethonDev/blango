@@ -2,20 +2,25 @@
 {% load blog_extras %}
 
 {% block content %}
-<h2>{{ post.title }}</h2>
-{% row "border-bottom" %}
-    <div class="col">
-        {% include "blog/post-byline.html" %}
-    </div>
-{% endrow %}
-{% row "border-bottom" %}
-    <div class="col">
-        {{ post.content|safe }}
-    </div>
-{% endrow %}
-{% row "border-bottom container mt-3"  %}
-    <div class="col">
-        {% recent_posts post %}
-    </div>
-{% endrow %}
+    <h2>{{ post.title }}</h2>
+    {% row "border-bottom" %}
+        <div class="col">
+            {% include "blog/post-byline.html" %}
+        </div>
+    {% endrow %}
+    {% row "border-bottom" %}
+        <div class="col">
+            {{ post.content|safe }}
+        </div>
+    {% endrow %}
+    {% row "border-bottom mt-3" %}
+        {% col %}
+            {% include "blog/post-comment.html" %}
+        {% endcol %}
+    {% endrow %}
+    {% row "border-bottom container mt-3"  %}
+        <div class="col">
+            {% recent_posts post %}
+        </div>
+    {% endrow %}
 {% endblock %}
