@@ -10,12 +10,18 @@ import logging
 # Add Logger
 logger = logging.getLogger(__name__)
 
+
+# Functions
+def get_ip(request):
+  from django.http import HttpResponse
+  return HttpResponse(request.META['REMOTE_ADDR'])
+
 # Create your views here.
 # @cache_page(timeout=300)
 # @vary_on_headers("Cookie") Alternative
 # @vary_on_cookie
 def index(request):
-    posts = Post.objects.filter(published_at__lte=timezone.now())
+    posts = Post.objects.filter(published_at__lte=timezone.now()).select_related("author").defer("created_at", "modified_at")
     logger.debug(f"Posts Retrieved : {len(posts)}")
     return render(request, "blog/index.html", {"posts": posts})
 
