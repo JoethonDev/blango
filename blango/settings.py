@@ -52,7 +52,8 @@ class Dev(Configuration):
         'crispy_forms',
         'crispy_bootstrap5',
         'debug_toolbar',
-        'blog'
+        'blog',
+        'blango_auth'
     ]
 
     MIDDLEWARE = [
@@ -192,6 +193,7 @@ class Dev(Configuration):
       'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
       'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     ] 
+    AUTH_USER_MODEL = "blango_auth.User"
 
 class Prod(Dev):
   DEBUG = False
