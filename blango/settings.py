@@ -60,7 +60,8 @@ class Dev(Configuration):
         "allauth.socialaccount.providers.google",
         'rest_framework',
         'blog',
-        'blango_auth'
+        'blango_auth',
+        "drf_yasg"
     ]
 
     
@@ -218,6 +219,13 @@ class Dev(Configuration):
             "rest_framework.authentication.SessionAuthentication",
             "rest_framework.authentication.TokenAuthentication",
         ]
+    }
+
+    SWAGGER_SETTINGS = {
+      "SECURITY_DEFINITIONS" : {
+        "Token" : {"type" : "apiKey", "name":"Authorization", "in":"header"},
+        "Basic" : {"type" : "basic"}
+      }
     }
 
 class Prod(Dev):
