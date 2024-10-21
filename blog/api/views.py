@@ -9,6 +9,9 @@ from django.views.decorators.vary import vary_on_headers, vary_on_cookie
 from blog.api.serializers import PostSerializer, UserSerializer, PostDetailSerializer, TagSerializer
 from blog.models import Post, Tag
 from blango_auth.models import User
+from django.utils import timezone
+from django.db.models import Q
+from django.http import Http404
 
 # PostViewSet Subsutite below classes
 # class PostList(generics.ListCreateAPIView):
@@ -25,12 +28,47 @@ from blango_auth.models import User
 class PostViewSet(viewsets.ModelViewSet):
   queryset = Post.objects.all()
 
+  def get_queryset(self):
+    queryset = self.queryset
+
+    if self.request.user.is_anonymous:
+      queryset = self.queryset.filter(published_at__lte=timezone.now())
+
+    if self.request.user.is_staff:
+      queryset = self.queryset
+    else :
+      queryset = self.queryset.filter(
+        Q(published_at__lte=timezone.now()) | Q(author=self.request.user)
+      )
+
+    # Filter URL
+    time_period = self.kwargs.get("period_name")
+    if not time_period:
+      return queryset
+
+    if time_period == "new":
+      return queryset.filter(published_at__gte=(timezone.now() - timezone.timedelta(hours=1)))
+    
+    if time_period == "today":
+      return queryset.filter(published_at__date=timezone.now().date())
+    
+    if time_period == "week":
+      return queryset.filter(published_at__gte=(timezone.now() - timezone.timedelta(days=7)))
+
+    raise Http404(
+                f"Time period {time_period_name} is not valid, should be "
+                f"'new', 'today' or 'week'"
+            )
+
+    
+
   def get_serializer_class(self):
     if self.action in ("list", "create"):
       return PostSerializer
     return PostDetailSerializer
 
   @method_decorator(cache_page(120))
+  @method_decorator(vary_on_headers("Authorization", "Cookie"))
   def list(self, *args, **kwargs):
     return super(PostViewSet, self).list(*args, **kwargs)
 
