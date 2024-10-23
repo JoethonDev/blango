@@ -41,7 +41,8 @@ class TagApiTestCase(LiveServerTestCase):
     # Check Status
     self.assertEqual(resp.status_code, 200)
     # Check Values
-    tags = resp.json()
+    tags = resp.json()['results']
+    print(tags)
     self.assertEqual({tag['value'] for tag in tags}, self.tags)
     
   def test_tag_create_token_auth(self):

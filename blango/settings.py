@@ -61,7 +61,8 @@ class Dev(Configuration):
         'rest_framework',
         'blog',
         'blango_auth',
-        "drf_yasg"
+        "drf_yasg",
+        "django_filters"
     ]
 
     
@@ -230,7 +231,13 @@ class Dev(Configuration):
           "user_sustained" : "5000/day",
           "anon_brust" : "10/minute",
           "user_brust" : "100/minute",
-        }
+        },
+        "DEFAULT_PAGINATION_CLASS" : "rest_framework.pagination.PageNumberPagination",
+        "PAGE_SIZE" : 100,
+        "DEFAULT_FILTER_BACKENDS" : [
+            "django_filters.rest_framework.DjangoFilterBackend",
+            "rest_framework.filters.OrderingFilter",
+        ]
     }
 
     SWAGGER_SETTINGS = {
