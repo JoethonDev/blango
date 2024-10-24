@@ -27,6 +27,13 @@
             {% include "blog/post-comment.html" %}
         {% endcol %}
     {% endrow %}
+    {% if post.hero_image %}
+        {% row %}
+            {% col %}
+                <img src="{{ post.hero_image.url }}" class="img-fluid">
+            {% endcol %}
+        {% endrow %}
+    {% endif %}
     {% row "border-bottom container mt-3"  %}
         <div class="col">
             {% cache 3600 recent_posts post %}

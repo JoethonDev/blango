@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 from configurations import Configuration, values
 import dj_database_url
+from datetime import timedelta
 
 
 class Dev(Configuration):
@@ -62,7 +63,8 @@ class Dev(Configuration):
         'blog',
         'blango_auth',
         "drf_yasg",
-        "django_filters"
+        "django_filters",
+        "versatileimagefield"
     ]
 
     
@@ -252,6 +254,9 @@ class Dev(Configuration):
         "Basic" : {"type" : "basic"}
       }
     }
+
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
 
 class Prod(Dev):
   DEBUG = False
