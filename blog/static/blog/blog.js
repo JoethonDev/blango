@@ -1,25 +1,46 @@
-function resolvedCallback(data) {
-  console.log('Resolved with data ' +  data)
-}
+class ClickButton extends React.Component {
 
-function rejectedCallback(message) {
-  console.log('Rejected with message ' + message)
-}
-
-const lazyAdd = function (a, b) {
-  const doAdd = (resolve, reject) => {
-    if (typeof a !== "number" || typeof b !== "number") {
-      reject("a and b must both be numbers")
-    } else {
-      const sum = a + b
-      resolve(sum)
-    }
+  state = {
+    wasClicked : false
   }
 
-  return new Promise(doAdd)
+  handleClick() { 
+    this.setState(
+      {
+        wasClicked : true
+      }
+    )
+  }
+
+  render() {
+    let buttonText;
+
+    if (this.state.wasClicked){
+      buttonText = "Button is clicked!"
+
+    }
+    else {
+      buttonText = "Click me"
+    }
+
+    return React.createElement(
+      "button", 
+      {
+        className : "mt-2 btn btn-primary",
+        onClick : () => {
+          this.handleClick()
+        }
+
+      },
+      buttonText
+    )
+  }
+
 }
 
-const p = lazyAdd(3, 4)
-p.then(resolvedCallback, rejectedCallback)
+const domContainer = document.getElementById("react_root")
 
-lazyAdd("nan", "alsonan").then(resolvedCallback, rejectedCallback)
+ReactDOM.render(
+  React.createElement(ClickButton),
+  domContainer
+)
