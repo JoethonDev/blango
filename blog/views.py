@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_headers
@@ -56,4 +57,6 @@ def post_detail(request, slug):
     })
 
 def post_table(request):
-  return render(request, "blog/post-table.html")
+  return render(request, "blog/post-table.html", {
+    "post_list_url": reverse("post-list")
+  })
